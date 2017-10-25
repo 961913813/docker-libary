@@ -16,7 +16,7 @@ RUN set -x \
 		libevent-dev \
 		libsasl2-dev \
 		sasl2-bin \
-                libsasl2-modules \
+    libsasl2-modules \
 		make \
 		perl \
 		wget \
@@ -45,7 +45,7 @@ RUN set -x \
 	&& apt-mark manual \
 		libevent-2.0-5 \
 		libsasl2-2 \
-	&& apt-get purge -y --auto-remove $buildDeps \
+	#&& apt-get purge -y --auto-remove $buildDeps \
 	\
 	&& memcached -V
 
