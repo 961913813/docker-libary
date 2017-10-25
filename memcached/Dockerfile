@@ -52,8 +52,6 @@ RUN set -x \
 ADD saslauthd /etc/default/saslauthd
 RUN mkdir -p /etc/sysconfig \
     && echo "MECH=shadow" >> /etc/sysconfig/saslauthd \
-    && chown memcache:memcache /etc/sasldb2 \
-    && chown memcache:memcache /run/saslauthd \
     && /etc/init.d/saslauthd restart
 
 #COPY docker-entrypoint.sh /usr/local/bin/
