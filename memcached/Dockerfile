@@ -52,7 +52,7 @@ RUN set -x \
 #COPY docker-entrypoint.sh /usr/local/bin/
 #RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 #ENTRYPOINT ["docker-entrypoint.sh"]
-RUN mkdir -p /etc/sysconfig |
+RUN mkdir -p /etc/sysconfig \
     && echo "MECH=shadow" >> /etc/sysconf/saslauthd \
     && chown memcache:memcache /etc/sasldb2 \
     && chown memcache:memcache /run/saslauthd \
