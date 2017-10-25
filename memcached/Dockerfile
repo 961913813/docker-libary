@@ -52,7 +52,7 @@ RUN set -x \
 #COPY docker-entrypoint.sh /usr/local/bin/
 #RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 #ENTRYPOINT ["docker-entrypoint.sh"]
-
+RUN chown memcache:memcache /etc/sasldb2
 USER memcache
 EXPOSE 11211
 CMD ["memcached"]
