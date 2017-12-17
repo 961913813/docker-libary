@@ -21,23 +21,11 @@ RUN set -x \
 	&& apt-get update -y && apt-get install -y --no-install-recommends $buildDeps \
 		libevent-dev \
 		libsasl2-dev \
+		libsasl2-modules \
+                sasl2-bin \
 	\
 	&& rm -rf /var/lib/apt/lists/* \
-	wget -O cyrus-sasl.tar.gz "http://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-2.1.26.tar.gz" \
-	&& echo "$CRYUS_SASL_SHA1  memcached.tar.gz" | sha1sum -c - \
-	&& mkdir -p /usr/src/cryus-sals \
-	&& tar -xzf cyrus-sasl.tar.gz -c /usr/src/cryus-sals --strip-components=1 \
-	&& rm cyrus-sasl.tar.gz \
-	&& cd /usr/src/cryus-sals \
-	&& ./configure --prefix=/usr        \
-            --sysconfdir=/etc    \
-            --enable-auth-sasldb \
-            --with-dbpath=/var/lib/sasl/sasldb2 \
-            --with-saslauthd=/var/run/saslauthd \
-	&& make \
-	&& make install
-
-RUN wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" \
+        && wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" \
 	&& echo "$MEMCACHED_SHA1  memcached.tar.gz" | sha1sum -c - \
 	&& mkdir -p /usr/src/memcached \
 	&& tar -xzf memcached.tar.gz -C /usr/src/memcached --strip-components=1 \
@@ -53,8 +41,8 @@ RUN wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_V
 	&& make install \
 	\
 	&& cd / && rm -rf /usr/src/memcached \
-	&& apt-get purge -y --auto-remove $buildDeps \
-	\
+	&& apt-get purge -y --auto-remove $buildDeps
+	
 ADD scripts /scripts
 RUN chmod +x /scripts/*.sh \
 	&& chown daemon:daemon /etc/sasldb2 \
