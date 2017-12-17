@@ -3,25 +3,25 @@ FROM debian:stretch-slim
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r memcache && useradd -r -g memcache memcache
 
-ENV MEMCACHED_VERSION 1.5.2
-ENV MEMCACHED_SHA1 5d6c85fe15b5e575a563ec1bbeb01020e0132958
+ENV MEMCACHED_VERSION 1.5.3
+ENV MEMCACHED_SHA1 9331ef99f1b7fedfe476062faed8c0ffb5528d8f
 
 RUN set -x \
-	\
 	&& buildDeps=' \
 		ca-certificates \
 		dpkg-dev \
 		gcc \
 		libc6-dev \
 		libevent-dev \
-		libsasl2-dev \
-		sasl2-bin \
-    libsasl2-modules \
 		make \
 		perl \
 		wget \
 	' \
-	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends \
+	&& apt-get install -y --no-install-recommends $buildDeps \
+		libevent-dev \
+		libsasl2-dev \
+		cyrus-sasl-dev \
+	\
 	&& rm -rf /var/lib/apt/lists/* \
 	\
 	&& wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" \
@@ -31,7 +31,6 @@ RUN set -x \
 	&& rm memcached.tar.gz \
 	\
 	&& cd /usr/src/memcached \
-	\
 	&& ./configure \
 		--build="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
 		--enable-sasl \
@@ -41,23 +40,17 @@ RUN set -x \
 	&& make install \
 	\
 	&& cd / && rm -rf /usr/src/memcached \
+	&& apt-get purge -y --auto-remove $buildDeps \
 	\
-	&& apt-mark manual \
-		libevent-2.0-5 \
-		libsasl2-2 \
-	#&& apt-get purge -y --auto-remove $buildDeps \
+ADD scripts /scripts
+RUN chmod +x /scripts/*.sh \
+	&& chown daemon:daemon /etc/sasldb2 \
+	&& /scripts/run.sh \
+	&& memcached -u daemon -S -l 0.0.0.0 $@ \
 	\
-	&& memcached -V
-
-ADD saslauthd /etc/default/saslauthd
-RUN mkdir -p /etc/sysconfig \
-    && echo "MECH=shadow" >> /etc/sysconfig/saslauthd \
-    && /etc/init.d/saslauthd restart
-
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
-# ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 USER memcache
 EXPOSE 11211
