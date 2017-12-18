@@ -18,7 +18,7 @@ RUN set -x \
 		perl \
 		wget \
 	' \
-	&& apt-get install -y --no-install-recommends $buildDeps \
+	&& apt-get update -y && apt-get install -y --no-install-recommends $buildDeps \
 		libevent-dev \
 		libsasl2-dev \
 	\
