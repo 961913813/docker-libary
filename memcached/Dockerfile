@@ -49,7 +49,7 @@ RUN chmod +x /scripts/*.sh \
 	&& chown daemon:daemon /etc/sasldb2 \
 	&& /scripts/run.sh \
 	&& apt-get purge -y --auto-remove $buildDeps \
-	&& memcached -u daemon -S -l 0.0.0.0 $@ \
+	&& memcached -V \
 	\
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
