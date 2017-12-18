@@ -5,6 +5,7 @@ RUN groupadd -r memcache && useradd -r -g memcache memcache
 
 ENV MEMCACHED_VERSION 1.5.3
 ENV MEMCACHED_SHA1 9331ef99f1b7fedfe476062faed8c0ffb5528d8f
+ENV CRYUS_SASL_SHA1 a7f4e5e559a0e37b3ffc438c9456e425
 
 RUN set -x \
 	&& buildDeps=' \
@@ -20,9 +21,20 @@ RUN set -x \
 	&& apt-get install -y --no-install-recommends $buildDeps \
 		libevent-dev \
 		libsasl2-dev \
-		cyrus-sasl-dev \
 	\
 	&& rm -rf /var/lib/apt/lists/* \
+	wget -O cyrus-sasl.tar.gz "ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-2.1.26.tar.gz" \
+	&& echo "$CRYUS_SASL_SHA1  memcached.tar.gz" | sha1sum -c - \
+	&& mkdir -p /usr/src/cryus-sals \
+	&& tar -xzf cyrus-sasl.tar.gz -c /usr/src/cryus-sals --strip-components=1 \
+	&& rm cyrus-sasl.tar.gz \
+	&& cd /usr/src/cryus-sals \
+	&& ./configure --prefix=/usr        \
+            --sysconfdir=/etc    \
+            --enable-auth-sasldb \
+            --with-dbpath=/var/lib/sasl/sasldb2 \
+            --with-saslauthd=/var/run/saslauthd \
+	&& make \
 	\
 	&& wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" \
 	&& echo "$MEMCACHED_SHA1  memcached.tar.gz" | sha1sum -c - \
