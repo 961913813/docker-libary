@@ -17,6 +17,7 @@ RUN set -x \
 		make \
 		perl \
 		wget \
+		pwgen \
 	' \
 	&& apt-get update -y && apt-get install -y --no-install-recommends $buildDeps \
 		libevent-dev \
