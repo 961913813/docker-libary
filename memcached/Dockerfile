@@ -41,8 +41,8 @@ RUN set -x \
 	&& make test \
 	&& make install \
 	\
-	&& cd / && rm -rf /usr/src/memcached 
-	
+	&& cd / && rm -rf /usr/src/memcached \
+	&& cd /
 	
 ADD scripts /scripts
 RUN chmod +x /scripts/*.sh \
