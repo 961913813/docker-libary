@@ -23,7 +23,7 @@ RUN set -x \
 		libsasl2-dev \
 	\
 	&& rm -rf /var/lib/apt/lists/* \
-	wget -O cyrus-sasl.tar.gz "ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-2.1.26.tar.gz" \
+	wget -O cyrus-sasl.tar.gz "http://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-2.1.26.tar.gz" \
 	&& echo "$CRYUS_SASL_SHA1  memcached.tar.gz" | sha1sum -c - \
 	&& mkdir -p /usr/src/cryus-sals \
 	&& tar -xzf cyrus-sasl.tar.gz -c /usr/src/cryus-sals --strip-components=1 \
@@ -35,8 +35,9 @@ RUN set -x \
             --with-dbpath=/var/lib/sasl/sasldb2 \
             --with-saslauthd=/var/run/saslauthd \
 	&& make \
-	\
-	&& wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" \
+	&& make install
+
+RUN wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" \
 	&& echo "$MEMCACHED_SHA1  memcached.tar.gz" | sha1sum -c - \
 	&& mkdir -p /usr/src/memcached \
 	&& tar -xzf memcached.tar.gz -C /usr/src/memcached --strip-components=1 \
