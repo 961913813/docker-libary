@@ -41,13 +41,14 @@ RUN set -x \
 	&& make test \
 	&& make install \
 	\
-	&& cd / && rm -rf /usr/src/memcached \
-	&& apt-get purge -y --auto-remove $buildDeps
+	&& cd / && rm -rf /usr/src/memcached 
+	
 	
 ADD scripts /scripts
 RUN chmod +x /scripts/*.sh \
 	&& chown daemon:daemon /etc/sasldb2 \
 	&& /scripts/run.sh \
+	&& apt-get purge -y --auto-remove $buildDeps \
 	&& memcached -u daemon -S -l 0.0.0.0 $@ \
 	\
 COPY docker-entrypoint.sh /usr/local/bin/
