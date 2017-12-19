@@ -19,11 +19,9 @@ RUN set -x \
 		wget \
 		pwgen \
 	' \
-	&& apt-get update -y && apt-get install -y --no-install-recommends $buildDeps \
-		libevent-dev \
+	&& apt-get update && apt-get install -y --no-install-recommends $buildDeps \
 		libsasl2-dev \
-		libsasl2-modules \
-                sasl2-bin \
+        sasl2-bin \
 	\
 	&& rm -rf /var/lib/apt/lists/* \
         && wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" \
@@ -42,17 +40,12 @@ RUN set -x \
 	&& make install \
 	\
 	&& cd / && rm -rf /usr/src/memcached \
-	&& cd /
-	
-ADD scripts /scripts
-RUN chmod +x /scripts/*.sh \
-	&& chown daemon:daemon /etc/sasldb2 \
-	&& /scripts/run.sh \
+        && export MEMCACHED_PWD="$(pwgen -s -1 16)" \
 	&& apt-get purge -y --auto-remove $buildDeps \
-	&& memcached -V \
-	\
+	&& memcached -V
+	
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
+RUN ln -s /usr/local/bin/docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 USER memcache
