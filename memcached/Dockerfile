@@ -41,6 +41,9 @@ RUN set -x \
 	\
 	&& cd / && rm -rf /usr/src/memcached \
         && export MEMCACHED_PWD="$(pwgen -s -1 16)" \
+	&& apt-mark manual \
+		libevent-2.0-5 \
+		libsasl2-2 \
 	&& apt-get purge -y --auto-remove $buildDeps \
 	&& memcached -V
 	
