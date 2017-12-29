@@ -1,12 +1,10 @@
-FROM debian-slim:sasl
-
-# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-RUN groupadd -r memcache && useradd -r -g memcache memcache
+FROM knoms/debian-slim:sasl
 
 ENV MEMCACHED_VERSION 1.5.3
 ENV MEMCACHED_SHA1 9331ef99f1b7fedfe476062faed8c0ffb5528d8f
 
 RUN set -x \
+	groupadd -r memcache && useradd -r -g memcache memcache \
 	&& buildDeps=' \
 		ca-certificates \
 		dpkg-dev \
@@ -49,7 +47,5 @@ RUN set -x \
 	
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s /usr/local/bin/docker-entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["docker-entrypoint.sh"]
-
 EXPOSE 11211
-CMD [""]
+ENTRYPOINT ["docker-entrypoint.sh"]
