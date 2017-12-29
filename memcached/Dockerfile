@@ -1,11 +1,10 @@
-FROM debian:stretch-slim
+FROM debian-slim:sals2
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r memcache && useradd -r -g memcache memcache
 
 ENV MEMCACHED_VERSION 1.5.3
 ENV MEMCACHED_SHA1 9331ef99f1b7fedfe476062faed8c0ffb5528d8f
-ENV CRYUS_SASL_SHA1 a7f4e5e559a0e37b3ffc438c9456e425
 
 RUN set -x \
 	&& buildDeps=' \
@@ -13,15 +12,13 @@ RUN set -x \
 		dpkg-dev \
 		gcc \
 		libc6-dev \
-		libevent-dev \
 		make \
 		perl \
 		wget \
 		pwgen \
 	' \
 	&& apt-get update && apt-get install -y --no-install-recommends $buildDeps \
-		libsasl2-dev \
-        sasl2-bin \
+			libevent-dev \
 	\
 	&& rm -rf /var/lib/apt/lists/* \
         && wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" \
@@ -44,13 +41,15 @@ RUN set -x \
 	&& apt-mark manual \
 		libevent-2.0-5 \
 		libsasl2-2 \
+		libevent-dev \
+	\
 	&& apt-get purge -y --auto-remove $buildDeps \
+	&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 	&& memcached -V
 	
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s /usr/local/bin/docker-entrypoint.sh /entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s /usr/local/bin/docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-USER memcache
 EXPOSE 11211
-CMD ["memcached"]
+CMD [""]
