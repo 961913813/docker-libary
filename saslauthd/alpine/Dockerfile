@@ -17,8 +17,9 @@ RUN set -x \
         openssl-dev \
 	' \
     && apk add --no-cache $buildDeps \
-    && curl -fSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini \
-    && chmod +x /bin/tini \
+       libldap \
+    #&& curl -fSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini \
+    #&& chmod +x /bin/tini \
     \
     && wget -O cyrus-sasl.tar.gz ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${CYRUS_SASL_VERSION}.tar.gz \
     && mkdir -p /usr/src/cyrus-sasl \
@@ -40,7 +41,7 @@ RUN set -x \
         /tmp/* \
         /var/tmp/* \
         /var/cache/apk/*
-        
+
 VOLUME ["/var/run/saslauthd"]
-ENTRYPOINT ["/bin/tini", "--", "/usr/sbin/saslauthd"]
+ENTRYPOINT ["/usr/sbin/saslauthd"]
 CMD ["-a", "ldap", "-d", "1"]
