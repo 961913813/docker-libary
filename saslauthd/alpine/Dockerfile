@@ -43,5 +43,5 @@ RUN set -x \
         /var/cache/apk/*
 
 VOLUME ["/var/run/saslauthd"]
-ENTRYPOINT ["/usr/sbin/saslauthd"]
+ENTRYPOINT ["/bin/tini", "--", "/usr/sbin/saslauthd"]
 CMD ["-a", "ldap", "-d", "1"]
