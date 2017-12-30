@@ -6,10 +6,12 @@ RUN set -x \
         dpkg-dev \
         wget \
         tar \
-        openssh-server \
+        curl \
     '\
     && wget -q -O - https://packages.gitlab.com/gpg.key | apt-key add - \
-  #  && EXTERNAL_URL="http://gitlab.example.com" dpkg -i gitlab-ee-9.5.2-ee.0_amd64.deb \
     && apt-get update && apt-get install -y --no-install-recommends $buildDeps \
-        gitlab-ce \
+        openssh-server \
+        postfix \
+    \
+    && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash \
     \
