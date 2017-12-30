@@ -4,7 +4,6 @@ ENV CYRUS_SASL_VERSION 2.1.26
 ENV CYRUS_SASL_SHA1 a7f4e5e559a0e37b3ffc438c9456e425
 
 RUN set -x \
-    && DEBIAN_FRONTEND=noninteractive \
     && buildDeps=' \
         autoconf \
         automake \
