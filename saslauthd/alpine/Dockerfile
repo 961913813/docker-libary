@@ -1,6 +1,7 @@
 FROM alpine:3.7
 MAINTAINER Atainacme <gd.shunhua@qq.com>
-ENV CYRUS_SASL_VERSION 2.1.26
+ENV CYRUS_SASL_VERSION=2.1.26 \
+    TINI_VERSION=0.8.3
 
 RUN set -x \
     && buildDeps=' \
@@ -16,8 +17,8 @@ RUN set -x \
         openssl-dev \
 	' \
     && apk add --no-cache $buildDeps \
-    #&& curl -fSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini \
-    #&& chmod +x /bin/tini \
+    && curl -fSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini \
+    && chmod +x /bin/tini \
     \
     && wget -O cyrus-sasl.tar.gz ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${CYRUS_SASL_VERSION}.tar.gz \
     && mkdir -p /usr/src/cyrus-sasl \
@@ -39,6 +40,7 @@ RUN set -x \
         /tmp/* \
         /var/tmp/* \
         /var/cache/apk/*
-
-ENTRYPOINT ["/usr/sbin/saslauthd"]
+        
+VOLUME ["/var/run/saslauthd"]
+ENTRYPOINT ["/bin/tini", "--", "/usr/sbin/saslauthd"]
 CMD ["-a", "ldap", "-d", "1"]
