@@ -12,14 +12,14 @@ RUN set -x \
 		wget \
         curl \
         libc-dev \
-        openldap-dev \
+     #   openldap-dev \
         tar \
         openssl-dev \
 	' \
     && apk add --no-cache $buildDeps \
        libldap \
-    #&& curl -fSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini \
-    #&& chmod +x /bin/tini \
+    && curl -fSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini \
+    && chmod +x /bin/tini \
     \
     && wget -O cyrus-sasl.tar.gz ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${CYRUS_SASL_VERSION}.tar.gz \
     && mkdir -p /usr/src/cyrus-sasl \
@@ -30,8 +30,8 @@ RUN set -x \
             --sysconfdir=/etc    \
             --enable-auth-sasldb \
             --enable-login \
-            --enable-ldapdb \
-            --with-ldap=/usr \
+            # --enable-ldapdb \
+            # --with-ldap=/usr \
             --with-dbpath=/var/lib/sasl/sasldb2 \
             --with-saslauthd=/var/run/saslauthd \
     && make -j"$(nproc)" \
