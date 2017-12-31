@@ -4,7 +4,7 @@ ENV MEMCACHED_VERSION 1.5.3
 ENV MEMCACHED_SHA1 9331ef99f1b7fedfe476062faed8c0ffb5528d8f
 
 RUN set -x \
-	groupadd -r memcache && useradd -r -g memcache memcache \
+	&& groupadd -r memcache && useradd -r -g memcache memcache \
 	&& buildDeps=' \
 		ca-certificates \
 		dpkg-dev \

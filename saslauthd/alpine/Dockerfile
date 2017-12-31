@@ -41,4 +41,4 @@ RUN set -x \
 
 VOLUME ["/var/run/saslauthd"]
 ENTRYPOINT ["/bin/tini", "--", "/usr/sbin/saslauthd"]
-CMD ["-a", "ldap", "-d", "1"]
+CMD ["-a", "-d", "1"]
