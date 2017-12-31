@@ -14,7 +14,6 @@ RUN set -x \
         libc-dev \
         tar \
         openssl-dev \
-        openldap-dev \
 	' \
     && apk add --no-cache $buildDeps \
        libldap \
@@ -30,8 +29,6 @@ RUN set -x \
             --sysconfdir=/etc    \
             --enable-auth-sasldb \
             --enable-login \
-            --enable-ldapdb \
-            --with-ldap=/usr \
             --with-dbpath=/var/lib/sasl/sasldb2 \
             --with-saslauthd=/var/run/saslauthd \
     && make -j"$(nproc)" \
