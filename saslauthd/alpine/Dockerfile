@@ -12,9 +12,9 @@ RUN set -x \
 		wget \
         curl \
         libc-dev \
-        openldap-dev \
         tar \
         openssl-dev \
+        openldap-dev \
 	' \
     && apk add --no-cache $buildDeps \
        libldap \
