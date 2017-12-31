@@ -12,7 +12,7 @@ RUN set -x \
 		wget \
         curl \
         libc-dev \
-     #   openldap-dev \
+        openldap-dev \
         tar \
         openssl-dev \
 	' \
@@ -30,8 +30,8 @@ RUN set -x \
             --sysconfdir=/etc    \
             --enable-auth-sasldb \
             --enable-login \
-            # --enable-ldapdb \
-            # --with-ldap=/usr \
+            --enable-ldapdb \
+            --with-ldap=/usr \
             --with-dbpath=/var/lib/sasl/sasldb2 \
             --with-saslauthd=/var/run/saslauthd \
     && make -j"$(nproc)" \
