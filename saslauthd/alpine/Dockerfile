@@ -35,8 +35,8 @@ RUN set -x \
     && cd /usr/src/cyrus-sasl \
     && patch -p1 -i /tmp/cyrus-sasl-avoid_pic_overwrite.patch || true \
     && patch -p1 -i /tmp/cyrus-sasl-size_t.patch || true \
-    && patch -Np1 -i ../cyrus-sasl-2.1.26-fixes-3.patch \
-    && patch -Np1 -i ../cyrus-sasl-2.1.26-openssl-1.1.0-.patch \
+    && patch -Np1 -i /tmp/cyrus-sasl-2.1.26-fixes-3.patch \
+    && patch -Np1 -i /tmp/cyrus-sasl-2.1.26-openssl-1.1.0-.patch \
     && autoreconf -fi \
     && ./configure --prefix=/usr        \
             --sysconfdir=/etc    \
