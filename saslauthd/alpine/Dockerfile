@@ -7,14 +7,17 @@ RUN set -x \
     && buildDeps=' \
         autoconf \
         automake \
+        db-dev \
 	    gcc g++\
 	    make \
 		wget \
         curl \
         tar \
-        libc-dev \
+        heimdal-dev \
+        libtool \
         db-dev \
         libtool \
+        openldap-dev \
         openssl-dev \
 	' \
     && apk add --no-cache $buildDeps \
@@ -54,4 +57,4 @@ RUN set -x \
 
 VOLUME ["/var/run/saslauthd"]
 ENTRYPOINT ["/bin/tini", "--", "/usr/sbin/saslauthd"]
-CMD ["-a", "-d", "1"]
+CMD ["-a", "ldap", "-d", "1"]
