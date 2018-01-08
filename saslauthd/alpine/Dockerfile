@@ -16,7 +16,6 @@ RUN set -x \
         db-dev \
         libtool \
         openssl-dev \
-        heimdal-dev \
 	' \
     && apk add --no-cache $buildDeps \
        libldap \
