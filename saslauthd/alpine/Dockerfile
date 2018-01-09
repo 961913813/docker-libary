@@ -7,17 +7,17 @@ RUN set -x \
     && buildDeps=' \
         autoconf \
         automake \
-        curl \
         db-dev \
-        g++ \
-        gcc \
-        gzip \
+	    gcc g++\
+	    make \
+		wget \
+        curl \
+        tar \
         heimdal-dev \
         libtool \
-        make \
-        openldap-dev \
+        db-dev \
+        libtool \
         openssl-dev \
-        tar \
 	' \
     && apk add --no-cache $buildDeps \
        libldap \
