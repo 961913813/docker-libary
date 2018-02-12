@@ -1,2 +1,2 @@
-FROM gcr.io/google_containers/kubernetes-dashboard-amd64:v1.7.1
-MAINTAINER elor <gd.shunhua@qq.com>
+FROM k8s.gcr.io/kubernetes-dashboard-amd64:v1.8.2
+MAINTAINER unisomer <gd.shunhua@qq.com>

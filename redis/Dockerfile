@@ -1,1 +1,4 @@
-FROM gcr.io/google_containers/redis:v1
+FROM redis:alpine
+
+ENV REDIS_PASSWORD root
+RUN sed -i -n 's/'
