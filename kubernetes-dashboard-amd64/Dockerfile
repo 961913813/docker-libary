@@ -1,2 +1,2 @@
 FROM k8s.gcr.io/kubernetes-dashboard-amd64:v1.8.2
-MAINTAINER unisomer <gd.shunhua@qq.com>
+MAINTAINER fatease <gd.shunhua@qq.com>

@@ -1,2 +1,2 @@
 FROM gcr.io/google_containers/pause-amd64:3.0
-MAINTAINER elor <gd.shunhua@qq.com>
+MAINTAINER fatease <gd.shunhua@qq.com>
