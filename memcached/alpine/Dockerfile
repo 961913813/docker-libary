@@ -21,8 +21,8 @@ RUN set -x \
         perl \
 		perl-utils \
 	\
-    && apk add --no-cache libevent-dev \
-    && wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" \
+    && apk add --no-cache libevent-dev 
+RUN wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" --no-check-certificate\
     && echo "$MEMCACHED_SHA1  memcached.tar.gz" | sha1sum -c - \
 	&& mkdir -p /usr/src/memcached \
 	&& tar -xzf memcached.tar.gz -C /usr/src/memcached --strip-components=1 \
@@ -44,10 +44,9 @@ RUN set -x \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
 	\
-	&& apk add --virtual .memcached-rundeps $runDeps \
-	&& apk del .build-deps \
-	\
-	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+	&& apk add --no-cache --virtual .memcached-rundeps $runDeps \
+	&& apk del --no-cache .build-deps \
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 	&& memcached -V
 
 COPY docker-entrypoint.sh /usr/local/bin/

@@ -1,0 +1,21 @@
+;## peanut.cn authoritative zone
+
+$ORIGIN peanut.cn.
+$TTL 86400
+
+@ IN SOA ns1.peanut.cn. webmaster.peanut.cn. (
+                2011100501      ; serial
+                28800           ; refresh
+                7200            ; retry
+                86400           ; expire
+                86400           ; min TTL
+                )
+
+                NS              ns1.peanut.cn.
+                MX      10      mail.peanut.cn.
+lists           MX      10      mail.apeanut.cn.
+@               IN      A       192.168.0.100
+mail            IN      A       192.168.0.100
+www             IN      A       192.168.0.100
+gitlab          IN      A       192.168.0.100
+registry        IN      A       192.168.0.100
