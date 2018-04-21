@@ -1,1 +1,0 @@
-FROM knoms/debian-slim:sasl

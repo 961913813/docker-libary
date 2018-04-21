@@ -1,6 +1,6 @@
-FROM knoms/saslauthd:alpine
+FROM alpine:3.7
 
-ENV MEMCACHED_VERSION 1.5.4
+ENV MEMCACHED_VERSION 1.5.7
 ENV MEMCACHED_SHA1 29cb75cc234dbaceed6e89db029af8363706f0fe
 
 RUN set -x \
@@ -21,9 +21,9 @@ RUN set -x \
         perl \
 		perl-utils \
 	\
-    && apk add --no-cache libevent-dev 
-RUN wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" --no-check-certificate\
-    && echo "$MEMCACHED_SHA1  memcached.tar.gz" | sha1sum -c - \
+    && apk add --no-cache libevent-dev cyrus-sasl 
+RUN wget -O memcached.tar.gz "http://memcached.org/files/memcached-$MEMCACHED_VERSION.tar.gz" --no-check-certificate\
+    # && echo "$MEMCACHED_SHA1  memcached.tar.gz" | sha1sum -c - \
 	&& mkdir -p /usr/src/memcached \
 	&& tar -xzf memcached.tar.gz -C /usr/src/memcached --strip-components=1 \
 	&& rm memcached.tar.gz \
@@ -37,19 +37,19 @@ RUN wget -O memcached.tar.gz "https://memcached.org/files/memcached-$MEMCACHED_V
 	&& make install \
 	\
 	&& cd / && rm -rf /usr/src/memcached \
-	&& runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)" \
-	\
-	&& apk add --no-cache --virtual .memcached-rundeps $runDeps \
+	# && runDeps="$( \
+	# 	scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+	# 		| tr ',' '\n' \
+	# 		| sort -u \
+	# 		| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+	# )" \
+	# \
+	# && apk add --no-cache --virtual .memcached-rundeps $runDeps \
 	&& apk del --no-cache .build-deps \
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 	&& memcached -V
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s /usr/local/bin/docker-entrypoint.sh /entrypoint.sh
+# RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s /usr/local/bin/docker-entrypoint.sh /entrypoint.sh
 EXPOSE 11211
 ENTRYPOINT ["docker-entrypoint.sh"]
