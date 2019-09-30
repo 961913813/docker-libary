@@ -1,2 +1,2 @@
-FROM gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.7
-MAINTAINER fatease <gd.shunhua@qq.com>
+FROM k8s.gcr.io/coredns:1.6.2
+MAINTAINER wt
