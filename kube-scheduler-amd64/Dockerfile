@@ -1,2 +1,2 @@
-FROM gcr.io/google_containers/kube-scheduler-amd64:v1.9.3
-MAINTAINER fatease <gd.shunhua@qq.com>
+FROM k8s.gcr.io/kube-scheduler:v1.16.0
+MAINTAINER wt
