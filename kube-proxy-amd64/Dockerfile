@@ -1,2 +1,2 @@
-FROM gcr.io/google_containers/kube-proxy-amd64:v1.9.3
-MAINTAINER fatease <gd.shunhua@qq.com>
+FROM k8s.gcr.io/kube-proxy:v1.16.0
+MAINTAINER wt
